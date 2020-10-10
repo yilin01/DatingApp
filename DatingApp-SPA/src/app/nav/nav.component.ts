@@ -9,16 +9,18 @@ import { Router } from '@angular/router';
   styleUrls: ['./nav.component.css']
 })
 export class NavComponent implements OnInit {
-  model: any = {}
+  model: any = {};
+  photoUrl: string;
 
   constructor(public authServices: AuthService, private alertify: AlertifyService, private router: Router) { }
 
   ngOnInit() {
+    this.authServices.currentPhotoUrl.subscribe(photoUrl => this.photoUrl = photoUrl);
   }
 
   login() {
     this.authServices.login(this.model).subscribe(next => {
-      this.alertify.success('logged successfully');      
+      this.alertify.success('logged successfully');
     }, error => {
       this.alertify.error(error);
     }, () => {
@@ -27,11 +29,15 @@ export class NavComponent implements OnInit {
   }
 
   loggedIn(){
+    console.log(this.authServices.decodedToken)
     return this.authServices.loggedIn();
   }
 
   logout(){
     localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    this.authServices.decodedToken = null;
+    this.authServices.currentUser = null;
     this.alertify.message('logout sucessfully');
     this.router.navigate(['/home']);
 
