@@ -5,6 +5,8 @@ import {HttpClientModule} from '@angular/common/http';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { PaginationModule } from 'ngx-bootstrap/pagination';
+import { ButtonsModule } from 'ngx-bootstrap/buttons';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { RouterModule } from '@angular/router';
 import {NgxGalleryModule} from 'ngx-gallery-9';
@@ -32,6 +34,7 @@ import { PreventUnsavedChanges } from './_guards/prevent-unsaved-changes.guard';
 import { PhotoEditorComponent } from './members/photo-editor/photo-editor.component';
 import { FileUploadModule } from 'ng2-file-upload';
 import {TimeagoModule} from 'ngx-timeago';
+import { MemberListResolver } from './_resolvers/member-list.resolver';
 
 export function tokenGetter(){
   return localStorage.getItem('token');
@@ -60,8 +63,10 @@ export function tokenGetter(){
     BrowserAnimationsModule,
     BsDropdownModule.forRoot(),
     BsDatepickerModule.forRoot(),
+    PaginationModule.forRoot(),     
     TimeagoModule.forRoot(),
     TabsModule.forRoot(),
+    ButtonsModule.forRoot(),
     RouterModule.forRoot(appRoutes),
     NgxGalleryModule,
     FileUploadModule,
@@ -81,6 +86,7 @@ export function tokenGetter(){
     UserService,
     MemberDetailResolver,
     MemberEditResolver,
+    MemberListResolver,
     PreventUnsavedChanges
   ],
   bootstrap: [AppComponent]
