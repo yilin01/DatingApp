@@ -36,6 +36,8 @@ import { FileUploadModule } from 'ng2-file-upload';
 import {TimeagoModule} from 'ngx-timeago';
 import { MemberListResolver } from './_resolvers/member-list.resolver';
 import { ListsResolver } from './_resolvers/lists.resolver';
+import { MessageResolver } from './_resolvers/message.resolver';
+import { MemberMessagesComponent } from './members/member-messages/member-messages.component';
 
 export function tokenGetter(){
   return localStorage.getItem('token');
@@ -53,7 +55,8 @@ export function tokenGetter(){
       MemberCardComponent,
       MemberDetailComponent,
       MemberEditComponent,
-      PhotoEditorComponent
+      PhotoEditorComponent,
+      MemberMessagesComponent
    ],
   imports: [
     BrowserModule,
@@ -89,7 +92,8 @@ export function tokenGetter(){
     MemberEditResolver,
     MemberListResolver,
     ListsResolver,
-    PreventUnsavedChanges
+    PreventUnsavedChanges,
+    MessageResolver
   ],
   bootstrap: [AppComponent]
 })
