@@ -30,12 +30,30 @@ namespace DatingApp.API
             Configuration = configuration;
         }
 
+        // public void ConfigureDevelopmentServices(IServiceCollection services)
+        // {
+        //     services.AddDbContext<DataContext>(x => x.UseSqlServer
+        //     (Configuration.GetConnectionString("SqlServerConnectString")));
+
+        //     ConfigureServices(services);
+
+        // }
+
+        // public void ConfigureProductionServices(IServiceCollection services)
+        // {
+        //     services.AddDbContext<DataContext>(x => x.UseMySql
+        //     (Configuration.GetConnectionString("MySqlConnectString")));
+
+        //     ConfigureServices(services);
+
+        // }
+
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<DataContext>(x => x.UseSqlServer(Configuration.GetConnectionString("SqlServerConnectString")));
+             services.AddDbContext<DataContext>(x => x.UseSqlServer(Configuration.GetConnectionString("SqlServerConnectString")));
             // services.AddDbContext<DataContext>(x => x.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
             services.AddControllers().AddNewtonsoftJson(opt => {
                 opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
@@ -65,31 +83,35 @@ namespace DatingApp.API
             {
                 app.UseDeveloperExceptionPage();
             } else{
-                app.UseExceptionHandler(builder => {
-                    builder.Run(async context => {
-                        context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                        var error = context.Features.Get<IExceptionHandlerFeature>();
-                        Console.WriteLine(error);
-                        if(error != null)
-                        {
-                            context.Response.AddApplicationError(error.Error.Message);
-                            await context.Response.WriteAsync(error.Error.Message);
-                        }
-                    });
-                });
+                // app.UseExceptionHandler(builder => {
+                //     builder.Run(async context => {
+                //         context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                //         var error = context.Features.Get<IExceptionHandlerFeature>();
+                //         Console.WriteLine(error);
+                //         if(error != null)
+                //         {
+                //             context.Response.AddApplicationError(error.Error.Message);
+                //             await context.Response.WriteAsync(error.Error.Message);
+                //         }
+                //     });
+                // });
+                app.UseHsts();
             }
 
-            // app.UseHttpsRedirection();
+            app.UseDeveloperExceptionPage();
+            app.UseHttpsRedirection();
             app.UseCors(x=>x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             app.UseAuthentication();
 
             app.UseRouting();
 
             app.UseAuthorization();
-
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapFallbackToController("Index", "Fallback");
             });
         }
     }
